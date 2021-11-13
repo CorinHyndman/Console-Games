@@ -1,2 +1,2 @@
 # Console-Games
-A Collection of Console Games made in C# .Net
+A Collection of  C# .Net Terminal Games
