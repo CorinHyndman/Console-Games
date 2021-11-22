@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Threading;
 
 Console.WriteLine("Console Rock Paper Scissors");
