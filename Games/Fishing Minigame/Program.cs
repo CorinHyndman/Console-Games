@@ -8,118 +8,158 @@ using System.Text;
 ///
 
 
-string[] PenguinFishing =
+
+try
 {
-	@"     _   ",
-	@" /\ <`)  ",
-	@"|  \(V)  ",
-	@"| ]/ __)>",
-};
+	int frame = 0;
+	int score = 0;
+	int spawnFrame = 175;
+	bool gameOver = false;
+	List<Fish> allFish = new();
 
-int score = 0;
-Random rng = new();
-bool gameOver = false;
-List<Fish> allFish = new();
-
-Hook.X = Console.WindowWidth / 2;
-Hook.Y = Pond.YOffset;
-Hook.Sprite = '¿';
-Hook.Color = ConsoleColor.White;
-
-Console.CursorVisible = false;
-
-Console.Write("\r\n\r\n\r\n" + new string('_', Console.WindowWidth));
-for (int i = 0; i < PenguinFishing.Length; i++)
-{
-	Console.SetCursorPosition(Console.WindowWidth / 2, i);
-	Console.Write(PenguinFishing[i]);
-}
-
-while (!gameOver)
-{
-	if (Console.KeyAvailable)
+	string[] PENGUIN_SPRITE =
 	{
-		switch (Console.ReadKey(true).Key)
+		@"╭\   _  ",
+		@"│ \◄(o) ",
+		@"│  Ѥ( ) ",
+		@"│ ]/__)>",
+	};
+
+	Hook.X = Console.WindowWidth / 2;
+	Hook.Y = Pond.YOffset;
+	Hook.Sprite = Hook.EMPTY_SPRITE;
+	Hook.Color = ConsoleColor.White;
+
+	Console.OutputEncoding = System.Text.Encoding.UTF8;
+	Console.CursorVisible = false;
+
+	Console.Write(new string('\n', 3) + new string('_', Console.WindowWidth));
+	for (int i = 0; i < PENGUIN_SPRITE.Length; i++)
+	{
+		Console.SetCursorPosition(Console.WindowWidth / 2, i);
+		Console.Write(PENGUIN_SPRITE[i]);
+	}
+
+	while (!gameOver)
+	{
+		if (Console.KeyAvailable)
 		{
-			case ConsoleKey.S:
-				allFish.Add(new Samon()
+			switch (Console.ReadKey(true).Key)
+			{
+				case ConsoleKey.Escape: gameOver = true; break;
+				case ConsoleKey.UpArrow when Hook.Y > Pond.YOffset: Hook.Y--; break;
+				case ConsoleKey.DownArrow when Hook.Y < Console.WindowHeight - 1: Hook.Y++; break;
+			}
+		}
+		while (Console.KeyAvailable)
+		{
+			Console.ReadKey(true);
+		}
+
+		if (Hook.Sprite == Hook.CAUGHT_SPRITE && Hook.Y == Pond.YOffset)
+		{
+			score += 50;
+			Hook.Sprite = Hook.EMPTY_SPRITE;
+
+			if (score < 750)
+			{
+				int fishX = (Console.WindowWidth / 2) - (score / 50 * 4) - 5;
+				int fishY = 3;
+				if (score > 250)
 				{
-					X = Console.WindowWidth / 2,
-					Y = 1,
-					Sprite = "><'>",
-					Color = ConsoleColor.Red,
-					Direction = Direction.Right,
-					Hitbox = new(x: 0, y: 2, width: 4, height: 1),
-				});
-				break;
-			case ConsoleKey.Escape: gameOver = true; break;
-			case ConsoleKey.UpArrow when Hook.Y > Pond.YOffset: Hook.Y--; break;
-			case ConsoleKey.DownArrow when Hook.Y < Console.WindowHeight - 1: Hook.Y++; break;
-		}
-	}
-	while (Console.KeyAvailable)
-	{
-		Console.ReadKey(true);
-	}
+					fishY--;
+					fishX += 19;
+				}
+				if (score > 450)
+				{
+					fishY--;
+					fishX += 15;
+				}
+				if (score > 600)
+				{
+					fishY--;
+					fishX += 11;
+				}
 
-	if (Hook.Sprite is 'ö' && Hook.Y == Pond.YOffset)
-	{
-		score += 50;
-		Hook.Sprite = '¿';
-
-		if (score < 750)
-		{
-			int fishX = (Console.WindowWidth / 2) - (score / 50 * 4) - 5;
-			int fishY = 3;
-			if (score > 250)
-			{
-				fishY--;
-				fishX += 19;
+				Console.SetCursorPosition(fishX + fishY, fishY);
+				Console.ForegroundColor = ConsoleColor.DarkYellow;
+				Console.Write(Random.Shared.Next(0, 2) is 1 ? Fish.SPRITE_LEFT[0] : Fish.SPRITE_RIGHT[0]);
 			}
-			if (score > 450)
-			{
-				fishY--;
-				fishX += 15;
-			}
-			if (score > 600)
-			{
-				fishY--;
-				fishX += 11;
-			}
-
-			Console.SetCursorPosition(fishX + fishY, fishY);
-			Console.ForegroundColor = ConsoleColor.DarkYellow;
-			Console.Write(rng.Next(0, 2) is 1 ? "<'><" : "><'>");
 		}
-	}
 
-	Hook.Draw();
+		Hook.Draw();
 
-	for (int i = 0; i < allFish.Count; i++)
-	{
-		if (allFish[i].Sprite is null)
+        if (frame % spawnFrame is 0)
 		{
-			allFish.RemoveAt(i);
-			i--;
-			continue;
-		}
-		if (Hook.Sprite is '¿' &&
-			allFish[i].X == Hook.X &&
-			allFish[i].Y == Hook.Y - Pond.YOffset)
+			int x;
+			int y = Random.Shared.Next(1, Pond.Columns);
+			switch (Random.Shared.Next(0,2))
+            {
+                case 0:
+					x = Random.Shared.Next(-10, -5);
+					allFish.Add(new()
+					{
+						X = x,
+						Y = y,
+						Sprite = Fish.SPRITE_RIGHT[0],
+						Color = ConsoleColor.DarkYellow,
+						Direction = Direction.Right,
+					});
+					break;
+				case 1:
+					x = Random.Shared.Next(Pond.Rows, Pond.Rows + 10);
+					allFish.Add(new()
+					{
+						X = x,
+						Y = y,
+						Sprite = Fish.SPRITE_LEFT[0],
+						Color = ConsoleColor.DarkYellow,
+						Direction = Direction.Left,
+					}); ;
+					break;
+			}
+        }
+
+        if (spawnFrame > 75)
+        {
+			spawnFrame--;
+        }
+
+		for (int i = 0; i < allFish.Count; i++)
 		{
-			Hook.Sprite = 'ö';
-			allFish.RemoveAt(i);
-			i--;
-			continue;
+			if (allFish[i].Sprite is null || 
+			   (allFish[i].Direction is Direction.Left && allFish[i].X < -Fish.SPRITE_LEFT.Length) ||
+			   (allFish[i].Direction is Direction.Right && allFish[i].X > Fish.SPRITE_LEFT.Length + Pond.Rows))
+			{
+				allFish.RemoveAt(i);
+				i--;
+				continue;
+			}
+			if (Hook.Sprite == Hook.EMPTY_SPRITE && 
+				allFish[i].X == Hook.X - ((int)allFish[i].Direction * (Fish.SPRITE_LENGTH / 2)) && 
+				allFish[i].Y == Hook.Y - PENGUIN_SPRITE.Length)
+			{
+				Hook.Sprite = Hook.CAUGHT_SPRITE;
+				allFish.RemoveAt(i);
+				i--;
+				continue;
+			}
+			allFish[i].Draw();
+			allFish[i].Update();
 		}
-		allFish[i].Draw();
-		allFish[i].Update();
+
+		Thread.Sleep(TimeSpan.FromMilliseconds(100));
+
+		Pond.Draw();
+		Pond.Clear();
+		frame++;
 	}
-
-	Thread.Sleep(TimeSpan.FromMilliseconds(100));
-
-	Pond.Draw();
-	Pond.Clear();
+}
+finally
+{
+	Console.CursorVisible = true;
+	Console.ResetColor();
+	Console.Clear();
 }
 
 static class Pond
@@ -127,8 +167,8 @@ static class Pond
 	public const int YOffset = 4;
 	public const int XOffset = 6;
 
-	private static int Rows;
-	private static int Columns;
+	public static int Rows;
+	public static int Columns;
 	private static char[,] Sprite;
 	static Pond()
 	{
@@ -183,23 +223,29 @@ static class Pond
 			return false;
 		}
 
-		for (int i = 0; i < fish.Sprite.Length; i++)
+		for (int i = 0; i < Fish.SPRITE_LENGTH; i++)
 		{
-			if (Sprite[fish.Y, fish.X + i] is not ' ')
+			if (fish.X + i < Rows && Sprite[fish.Y, fish.X + i] is not ' ')
 			{
 				return false;
 			}
 		}
 
-		for (int i = 0; i < fish.Sprite.Length; i++)
+		for (int i = 0; i < Fish.SPRITE_LENGTH; i++)
 		{
-			Sprite[fish.Y, fish.X + i] = fish.Sprite[i];
+            if (fish.X + i < Rows)
+            {
+				Sprite[fish.Y, fish.X + i] = fish.Sprite[i];
+			}
 		}
 		return true;
 	}
 }
 static class Hook
 {
+	public static readonly char CAUGHT_SPRITE = 'ö';
+	public static readonly char EMPTY_SPRITE = 'ʖ';
+
 	public static int X;
 	public static int Y;
 	public static char Sprite;
@@ -210,10 +256,10 @@ static class Hook
 		for (int i = Pond.YOffset - 1; i < Y; i++)
 		{
 			Console.SetCursorPosition(Console.WindowWidth / 2, i);
-			Console.Write('|');
+			Console.Write('│');
 		}
 
-		Console.ForegroundColor = Sprite is 'ö'
+		Console.ForegroundColor = Sprite == CAUGHT_SPRITE
 			? ConsoleColor.DarkYellow
 			: ConsoleColor.DarkGray;
 		Console.SetCursorPosition(Console.WindowWidth / 2, Y);
@@ -221,15 +267,25 @@ static class Hook
 		Console.ForegroundColor = ConsoleColor.White;
 	}
 }
-abstract class Fish
+class Fish
 {
+	public static readonly int SPRITE_LENGTH = 5;
+	public static readonly string[] SPRITE_LEFT  = { "ϵ(°)<", "ϵ(°)-" };
+	public static readonly string[] SPRITE_RIGHT = { ">(°)϶", "-(°)϶" };
+
+	public int Frame = 0;
+
 	public int X { get; set; }
 	public int Y { get; set; }
 	public int Damage { get; set; }
-	public string Sprite { get; set; }
 	public Hitbox Hitbox { get; set; }
 	public Direction Direction { get; set; }
 	public ConsoleColor Color { get; set; }
+	public string Sprite 
+	{
+		get { return Direction is Direction.Left ? SPRITE_LEFT[Frame] : SPRITE_RIGHT[Frame]; }
+		set { }
+	}
 	public void Draw()
 	{
 		Console.ForegroundColor = Color;
@@ -238,7 +294,12 @@ abstract class Fish
 	public void Update()
 	{
 		X += (int)Direction;
-		Hitbox.X += (int)Direction;
+
+		Frame++;
+        if (Frame >= SPRITE_LEFT.Length)
+        {
+			Frame = 0;
+        }
 
 		if (Sprite.Length is 1)
 		{
@@ -249,18 +310,12 @@ abstract class Fish
 		if (X < 0)
 		{
 			Sprite = Sprite[1..];
-			Hitbox.Width = Sprite.Length;
 		}
 		if (X + Sprite.Length > Console.WindowWidth)
 		{
 			Sprite = Sprite[..^1];
-			Hitbox.Width = Sprite.Length;
 		}
 	}
-}
-class Samon : Fish
-{
-
 }
 class Hitbox
 {

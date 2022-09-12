@@ -2,36 +2,48 @@
 using System.Text;
 using System.Threading;
 
+/// DONE
+
 const int BORDER_SIZE = 1;
 const int BOARD_WIDTH = 41;
 const int BOARD_HEIGHT = 9;
 const int PADDLE_HEIGHT = 3;
 const char BALL_SPRITE = 'o';
 
-if (Console.WindowWidth < BOARD_WIDTH || Console.WindowHeight < BOARD_HEIGHT)
-{
-	Console.WriteLine("Console Window Too small please resize then retry");
-	Console.WriteLine($"Console Minimum Size Width: {BOARD_WIDTH} Height: {BOARD_HEIGHT}");
-	return;
-}
-
-int frame = 0;
-int ballUpdateFrame = 10;
-int opponentUpdateFrame = 7;
+int frame;
+int ballUpdateFrame;
+int opponentUpdateFrame;
 string border;
-string scoreDisplay = "{0,6} - {1,-6}";
-Random rng = new();
-bool gameOver = false;
-(int X, int Y) ball = (BORDER_SIZE + BOARD_WIDTH / 2, BORDER_SIZE + BOARD_HEIGHT / 2);
-(int X, int Y) ballSpeed = (0, 0);
-(int X, int Y) paddlePlayer   = (BORDER_SIZE, BOARD_HEIGHT / 2);
-(int X, int Y) paddleOpponent = (BOARD_WIDTH, BOARD_HEIGHT / 2);
-(int player, int opponent) score = (0, 0);
-
-Console.CursorVisible = false;
+string scoreDisplay;
+bool gameOver;
+(int X, int Y) ball;
+(int X, int Y) ballSpeed;
+(int X, int Y) paddlePlayer;
+(int X, int Y) paddleOpponent;
+(int player, int opponent) score;
 
 try
 {
+	if (Console.WindowWidth < BOARD_WIDTH || Console.WindowHeight < BOARD_HEIGHT)
+	{
+		Console.WriteLine("Console Window Too small please resize then retry");
+		Console.WriteLine($"Console Minimum Size Width: {BOARD_WIDTH} Height: {BOARD_HEIGHT}");
+		return;
+	}
+
+	frame = 0;
+	gameOver = false;
+	ballUpdateFrame = 10;
+	opponentUpdateFrame = 7;
+	scoreDisplay = "{0,6} - {1,-6}";
+	ball = (BORDER_SIZE + BOARD_WIDTH / 2, BORDER_SIZE + BOARD_HEIGHT / 2);
+	ballSpeed = (0, 0);
+	paddlePlayer = (BORDER_SIZE, BOARD_HEIGHT / 2);
+	paddleOpponent = (BOARD_WIDTH, BOARD_HEIGHT / 2);
+	score = (0, 0);
+
+	Console.CursorVisible = false;
+
 	border = GenerateBorder();
 	Console.Write(border);
 	ResetBall();
@@ -102,7 +114,7 @@ try
 					switch (i)
 					{
 						case 0: ballSpeed.Y = -1; break;
-						case 1:	ballSpeed.Y = 0; break;
+						case 1: ballSpeed.Y = Random.Shared.Next(10) < 5 ? -1 : 1; break;
 						case 2: ballSpeed.Y =  1; break;
 					}
 					ballSpeed.X = -ballSpeed.X;
@@ -159,20 +171,23 @@ try
 			Thread.Sleep(TimeSpan.FromSeconds(1));
 		}
 
-		ballSpeed.X = rng.Next(100) < 50 ? -1 : 1;
-		ballSpeed.Y = rng.Next(100) < 50 ? -1 : 1;
-		ballSpeed.Y = rng.Next(100) < 25 ? 0 : ballSpeed.Y;
+		ballSpeed.X = Random.Shared.Next(100) < 50 ? -1 : 1;
+		ballSpeed.Y = Random.Shared.Next(100) < 50 ? -1 : 1;
+		ballSpeed.Y = Random.Shared.Next(100) < 25 ? 0 : ballSpeed.Y;
 	}
 	void DrawPaddles()
 	{
 		for (int i = 0; i < PADDLE_HEIGHT; i++)
 		{
+			Console.ForegroundColor = ConsoleColor.Green;
 			Console.SetCursorPosition(paddlePlayer.X, paddlePlayer.Y + i);
 			Console.Write('█');
 
+			Console.ForegroundColor = ConsoleColor.Red;
 			Console.SetCursorPosition(paddleOpponent.X, paddleOpponent.Y + i);
 			Console.Write('█');
 		}
+		Console.ForegroundColor = ConsoleColor.White;
 	}
 	string GenerateBorder()
 	{

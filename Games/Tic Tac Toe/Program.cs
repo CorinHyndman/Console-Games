@@ -2,12 +2,19 @@
 using System.Linq;
 using System.Text;
 
+int input;
+bool gameOver;
+string clearLine;
+int[] validBotPositions;
+Player[] board;
+Random rng;
+
 try
 {
-	Random rng = new();
-	bool gameOver = false;
-	Player[] board = new Player[9];
-	string clearLine = new(' ', Console.WindowWidth);
+	rng = new();
+	gameOver = false;
+	board = new Player[9];
+	clearLine = new(' ', Console.WindowWidth);
 
 	Console.CursorVisible = false;
 	Console.ResetColor();
@@ -17,7 +24,7 @@ try
 	{
 		DrawBoard();
 
-		int input = GetRangedIntInput(minInclusive: 1, maxInclusive: 9) - 1;
+		input = GetRangedIntInput(minInclusive: 1, maxInclusive: 9) - 1;
 
 		while (board[input] is not Player.None)
 		{
@@ -35,7 +42,7 @@ try
 
 		board[input] = Player.X;
 
-		int[] validBotPositions = Enumerable.Range(0, board.Length)
+		validBotPositions = Enumerable.Range(0, board.Length)
 			.Where(i => board[i] is Player.None)
 			.ToArray();
 
@@ -88,20 +95,25 @@ try
 	{
 		StringBuilder boardString = new();
 
+		boardString.AppendLine();
 		boardString.AppendFormat("  {0} | {1} | {2} \n",
-			board[0] is not Player.None ? board[0].ToString() : 1,
-			board[1] is not Player.None ? board[1].ToString() : 2,
-			board[2] is not Player.None ? board[2].ToString() : 3);
+			board[0] is Player.None ? 1 : board[0].ToString(),
+			board[1] is Player.None ? 2 : board[1].ToString(),
+			board[2] is Player.None ? 3 : board[2].ToString());
+
 		boardString.AppendLine(" ───┼───┼───");
+
 		boardString.AppendFormat("  {0} | {1} | {2} \n",
-			board[3] is not Player.None ? board[3].ToString() : 4,
-			board[4] is not Player.None ? board[4].ToString() : 5,
-			board[5] is not Player.None ? board[5].ToString() : 6);
+			board[3] is Player.None ? 4 : board[3].ToString(),
+			board[4] is Player.None ? 5 : board[4].ToString(),
+			board[5] is Player.None ? 6 : board[5].ToString());
+
 		boardString.AppendLine(" ───┼───┼───");
+
 		boardString.AppendFormat("  {0} | {1} | {2} \n",
-			board[6] is not Player.None ? board[6].ToString() : 7,
-			board[7] is not Player.None ? board[7].ToString() : 8,
-			board[8] is not Player.None ? board[8].ToString() : 9);
+			board[6] is Player.None ? 7 : board[6].ToString(),
+			board[7] is Player.None ? 8 : board[7].ToString(),
+			board[8] is Player.None ? 9 : board[8].ToString());
 
 		Console.SetCursorPosition(0, 0);
 		Console.Write(boardString);

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 
+/// DONE
+
 const int WIDTH = 40;
 const int HEIGHT = 15;
 
@@ -13,24 +15,33 @@ if (Console.WindowWidth < WIDTH + 2 ||
 	return;
 }
 
-bool gameOver = false;
-Queue<(int x, int y)> snakeBody = new();
-State snakeState = State.Neutral;
-(int x, int y) applePos = (WIDTH / 2, HEIGHT / 2);
-(int x, int y) snakeHead = (WIDTH / 2, HEIGHT / 2);
-TimeSpan gameDelay = TimeSpan.FromMilliseconds(120);
+bool gameOver;
+(int x, int y) applePos;
+(int x, int y) snakeHead;
+State snakeState;
+TimeSpan gameDelay;
+Queue<(int x, int y)> snakeBody;
 
 try
 {
+	gameOver = false;
+	snakeBody = new();
+	snakeState = State.Neutral;
+	applePos  = (WIDTH / 2, HEIGHT / 2);
+	snakeHead = (WIDTH / 2, HEIGHT / 2);
+	gameDelay = TimeSpan.FromMilliseconds(120);
+
+	Console.OutputEncoding = System.Text.Encoding.UTF8;
 	Console.CursorVisible = false;
+
 	while (snakeState is State.Neutral)
 	{
 		DrawBorder();
 		Console.SetCursorPosition(0,1);
 		Console.WriteLine("║Console Snake" + Environment.NewLine);
 		Console.WriteLine("║   Controls  " + Environment.NewLine);
-		Console.WriteLine("║   W      ^  " + Environment.NewLine);
-		Console.WriteLine("║ A S D  < V >" + Environment.NewLine);
+		Console.WriteLine("║   W      ▲  " + Environment.NewLine);
+		Console.WriteLine("║ A S D  ◄ ▼ ►" + Environment.NewLine);
 		Console.WriteLine("║Press Any Direction to start");
 
 		DrawSnake(ConsoleColor.Green);
@@ -133,7 +144,7 @@ try
 
 		Console.SetCursorPosition(applePos.x, applePos.y);
 		Console.ForegroundColor = ConsoleColor.Red;
-		Console.Write('@');
+		Console.Write('♥');
 	}
 
 	State GetSnakeState()
