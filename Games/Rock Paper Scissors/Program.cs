@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading;
 
-/// DONE
-
 Random rng;
 bool gameOver;
 Move playerMove;

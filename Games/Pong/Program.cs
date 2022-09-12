@@ -2,8 +2,6 @@
 using System.Text;
 using System.Threading;
 
-/// DONE
-
 const int BORDER_SIZE = 1;
 const int BOARD_WIDTH = 41;
 const int BOARD_HEIGHT = 9;

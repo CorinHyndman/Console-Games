@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 
-/// DONE
-
 const int WIDTH = 40;
 const int HEIGHT = 15;
 

@@ -15,13 +15,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rock Paper Scissors", "Game
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thin Ice", "Games\Thin Ice\Thin Ice.csproj", "{5CDB682A-C04A-4D64-A7EA-77873884AC58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minesweeeper", "Games\Minesweeeper\Minesweeeper.csproj", "{E9F50EA3-00AA-4977-9716-F64BDF0F47ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minesweeeper", "Games\Minesweeeper\Minesweeeper.csproj", "{E9F50EA3-00AA-4977-9716-F64BDF0F47ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleships", "Games\Battleships\Battleships.csproj", "{F77DEE99-4B5B-4CD1-9F6E-7B21FDC6D4CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Battleships", "Games\Battleships\Battleships.csproj", "{F77DEE99-4B5B-4CD1-9F6E-7B21FDC6D4CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess", "Games\Chess\Chess.csproj", "{F7B61D4E-80BA-4AF5-87AF-A42587CA91ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess", "Games\Chess\Chess.csproj", "{F7B61D4E-80BA-4AF5-87AF-A42587CA91ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect 4", "Games\Connect 4\Connect 4.csproj", "{E7F4C071-4045-4D2A-B9B1-6BBD5EEDBA5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Connect 4", "Games\Connect 4\Connect 4.csproj", "{E7F4C071-4045-4D2A-B9B1-6BBD5EEDBA5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guitar Hero", "Games\Guitar Hero\Guitar Hero.csproj", "{D14EDC84-BC67-46BE-A685-FCF08E92E5FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{E7F4C071-4045-4D2A-B9B1-6BBD5EEDBA5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7F4C071-4045-4D2A-B9B1-6BBD5EEDBA5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7F4C071-4045-4D2A-B9B1-6BBD5EEDBA5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D14EDC84-BC67-46BE-A685-FCF08E92E5FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D14EDC84-BC67-46BE-A685-FCF08E92E5FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D14EDC84-BC67-46BE-A685-FCF08E92E5FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D14EDC84-BC67-46BE-A685-FCF08E92E5FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

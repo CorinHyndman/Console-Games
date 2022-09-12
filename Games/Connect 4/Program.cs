@@ -2,6 +2,8 @@
 using System.Text;
 using System.Threading;
 
+/// W.I.P
+
 try
 {
     const int BOARD_ROWS = 6;
